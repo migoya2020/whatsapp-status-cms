@@ -1,0 +1,104 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="whatsappstatusApp.video.home.title">Videos</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-video" [routerLink]="['/video/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span class="hidden-sm-down"  jhiTranslate="whatsappstatusApp.video.home.createLabel">
+            Create a new Video
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'whatsappstatusApp.video.home.search' | translate }}">
+
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon icon="search"></fa-icon>
+                    </button>
+
+                    <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+                        <fa-icon icon="trash-alt"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="videos?.length === 0">
+        <span jhiTranslate="whatsappstatusApp.video.home.notFound">No videos found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="videos && videos.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+                    <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="title"><span jhiTranslate="whatsappstatusApp.video.title">Title</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="videoUrl"><span jhiTranslate="whatsappstatusApp.video.videoUrl">Video Url</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="description"><span jhiTranslate="whatsappstatusApp.video.description">Description</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="date"><span jhiTranslate="whatsappstatusApp.video.date">Date</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="tags"><span jhiTranslate="whatsappstatusApp.video.tags">Tags</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="views"><span jhiTranslate="whatsappstatusApp.video.views">Views</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let video of videos ;trackBy: trackId">
+                    <td><a [routerLink]="['/video', video.id, 'view']">{{ video.id }}</a></td>
+                    <td>{{ video.title }}</td>
+                    <td>
+                        <a *ngIf="video.videoUrl" (click)="openFile(video.videoUrlContentType, video.videoUrl)">
+                            <img [src]="'data:' + video.videoUrlContentType + ';base64,' + video.videoUrl" style="max-height: 30px;" alt="video image"/>
+                        </a>
+                        <span *ngIf="video.videoUrl">{{ video.videoUrlContentType }}, {{ byteSize(video.videoUrl) }}</span>
+                    </td>
+                    <td>{{ video.description }}</td>
+                    <td>{{ video.date | date:'medium' }}</td>
+                    <td jhiTranslate="{{ 'whatsappstatusApp.Tags.' + video.tags }}">{{ video.tags }}</td>
+                    <td>{{ video.views }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/video', video.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/video', video.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(video)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="videos && videos.length > 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+        </div>
+    </div>
+</div>

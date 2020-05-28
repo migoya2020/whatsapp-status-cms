@@ -1,0 +1,24 @@
+{
+  "whatsappstatusApp": {
+    "videoCategory": {
+      "home": {
+        "title": "Video Categories",
+        "createLabel": "Create a new Video Category",
+        "createOrEditLabel": "Create or edit a Video Category",
+        "search": "Search for Video Category",
+        "notFound": "No Video Categories found"
+      },
+      "created": "A new Video Category is created with identifier {{ param }}",
+      "updated": "A Video Category is updated with identifier {{ param }}",
+      "deleted": "A Video Category is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Video Category {{ id }}?"
+      },
+      "detail": {
+        "title": "Video Category"
+      },
+      "category": "Category",
+      "description": "Description"
+    }
+  }
+}
