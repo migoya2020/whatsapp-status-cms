@@ -1,0 +1,35 @@
+entity Video {
+title String required minlength(3) maxlength(30)
+videoUrl ImageBlob required
+description String minlength(5) maxlength(100)
+date Instant required 
+tags Tags
+views  BigDecimal min(0)
+}
+
+enum Tags {
+COMIC, COMMEDY, ENTERTAINMENT, EDU, CORONA
+}
+
+entity Profile {
+firstName String required     
+lastName String required    
+email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)     
+phone String required     
+addressLine1 String required
+addressLine2 String     
+city String required     
+country String required 
+}
+
+entity Comment {
+comment String required maxlength(45)
+commentDate Instant required
+}
+
+entity VideoCategory {
+category String required maxlength(12)
+description String maxlength(25)
+}
+service * with serviceClass 
+paginate Video, Profile, Comment with pagination
