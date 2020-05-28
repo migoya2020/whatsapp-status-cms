@@ -1,0 +1,55 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="video">
+            <h2><span jhiTranslate="whatsappstatusApp.video.detail.title">Video</span> {{ video.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="whatsappstatusApp.video.title">Title</span></dt>
+                <dd>
+                    <span>{{ video.title }}</span>
+                </dd>
+                <dt><span jhiTranslate="whatsappstatusApp.video.videoUrl">Video Url</span></dt>
+                <dd>
+                    <div *ngIf="video.videoUrl">
+                        <a (click)="openFile(video.videoUrlContentType, video.videoUrl)">
+                            <img [src]="'data:' + video.videoUrlContentType + ';base64,' + video.videoUrl" style="max-width: 100%;" alt="video image"/>
+                        </a>
+                        {{ video.videoUrlContentType }}, {{ byteSize(video.videoUrl) }}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="whatsappstatusApp.video.description">Description</span></dt>
+                <dd>
+                    <span>{{ video.description }}</span>
+                </dd>
+                <dt><span jhiTranslate="whatsappstatusApp.video.date">Date</span></dt>
+                <dd>
+                    <span>{{ video.date }}</span>
+                </dd>
+                <dt><span jhiTranslate="whatsappstatusApp.video.tags">Tags</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'whatsappstatusApp.Tags.' + video.tags }}">{{ video.tags }}</span>
+                </dd>
+                <dt><span jhiTranslate="whatsappstatusApp.video.views">Views</span></dt>
+                <dd>
+                    <span>{{ video.views }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/video', video.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
